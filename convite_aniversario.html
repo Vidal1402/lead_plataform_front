@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite Aniversário 1 Ano - Safari</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@300;400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #FFD700 100%);
+            font-family: 'Comic Neue', cursive;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .convite-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #FFD700;
+        }
+        
+        .convite-container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: #FF6B6B;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .convite-container::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 80px;
+            height: 80px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5em;
+            color: #FF6B6B;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #4A90E2;
+            margin-bottom: 20px;
+        }
+        
+        .animal-decoration {
+            font-size: 3em;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .content {
+            background: linear-gradient(45deg, #FFF8DC, #F0F8FF);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 3px dashed #FFD700;
+        }
+        
+        .info-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+        }
+        
+        .info-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .info-text {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .highlight {
+            color: #FF6B6B;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #FFD700;
+        }
+        
+        .rsvp {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .rsvp:hover {
+            transform: translateY(-2px);
+        }
+        
+        .decoration-elements {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            opacity: 0.3;
+        }
+        
+        .decoration-elements-2 {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 2em;
+            opacity: 0.3;
+        }
+        
+        @media (max-width: 600px) {
+            .convite-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="convite-container">
+        <div class="decoration-elements">🦁</div>
+        <div class="decoration-elements-2">🐘</div>
+        
+        <div class="header">
+            <h1 class="title">🎉 Convite Especial! 🎉</h1>
+            <p class="subtitle">Uma aventura selvagem está chegando!</p>
+        </div>
+        
+        <div class="animal-decoration">
+            🦁 🐘 🦒 🦛 🐯
+        </div>
+        
+        <div class="content">
+            <div class="info-item">
+                <span class="info-icon">👶</span>
+                <span class="info-text">Nome da criança: <span class="highlight">[Nome da criança]</span></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-icon">🎂</span>
+                <span class="info-text">Idade: <span class="highlight">1 aninho</span></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-icon">📅</span>
+                <span class="info-text">Data: <span class="highlight">[Data do evento]</span></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-icon">⏰</span>
+                <span class="info-text">Horário: <span class="highlight">[Horário do evento]</span></span>
+            </div>
+            
+            <div class="info-item">
+                <span class="info-icon">📍</span>
+                <span class="info-text">Local: <span class="highlight">[Endereço completo]</span></span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p style="color: #666; margin-bottom: 15px;">Venha celebrar conosco esta data especial!</p>
+            <a href="tel:[Número para RSVP]" class="rsvp">
+                📞 Confirmar Presença
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
