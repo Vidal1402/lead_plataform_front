@@ -243,14 +243,14 @@ const Dashboard: React.FC = () => {
           </h3>
           <div className="space-y-3">
             <Link
-              to="/generate"
+              to="/gerar-leads"
               className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <Download className="h-5 w-5 text-primary-600 dark:text-primary-400" />
               <span className="text-gray-900 dark:text-white">Gerar novos leads</span>
             </Link>
             <Link
-              to="/payments"
+              to="/comprar"
               className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <CreditCard className="h-5 w-5 text-primary-600 dark:text-primary-400" />

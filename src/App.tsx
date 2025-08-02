@@ -8,6 +8,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import GenerateLeads from './pages/GenerateLeads';
+import GerarLeads from './pages/GerarLeads';
+import Profile from './pages/Profile';
+import Comprar from './pages/Comprar';
+import Creditos from './pages/Creditos';
 import Pricing from './pages/Pricing';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -35,6 +39,34 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <GenerateLeads />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Profile />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/gerar-leads" element={
+              <ProtectedRoute>
+                <Layout>
+                  <GerarLeads />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/comprar" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Comprar />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/creditos" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Creditos />
                 </Layout>
               </ProtectedRoute>
             } />
