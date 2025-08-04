@@ -71,7 +71,7 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
         <Link
-          to="/generate"
+          to="/lead-generation"
           className="btn-primary flex items-center space-x-2"
         >
           <Download className="h-4 w-4" />

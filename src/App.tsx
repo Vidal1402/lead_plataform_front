@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import GenerateLeads from './pages/GenerateLeads';
 import GerarLeads from './pages/GerarLeads';
+import LeadGeneration from './pages/LeadGeneration';
 import Profile from './pages/Profile';
 import Comprar from './pages/Comprar';
 import Creditos from './pages/Creditos';
@@ -53,6 +54,13 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <GerarLeads />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/lead-generation" element={
+              <ProtectedRoute>
+                <Layout>
+                  <LeadGeneration />
                 </Layout>
               </ProtectedRoute>
             } />
