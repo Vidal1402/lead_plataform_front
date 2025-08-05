@@ -7,7 +7,10 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
+  timeout: 10000, // 10 segundos de timeout
+  withCredentials: false, // Desabilitar cookies para evitar problemas de CORS
 });
 
 // Interceptor para adicionar token de autenticação
@@ -28,10 +31,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('API Error:', error);
+    
     if (error.response?.status === 401) {
+      console.log('Token inválido, removendo do localStorage');
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Não redirecionar automaticamente, deixar o componente tratar
+      // window.location.href = '/login';
+    } else if (error.code === 'ERR_NETWORK') {
+      console.error('Erro de conexão com o backend');
+    } else if (error.response?.status === 0) {
+      console.error('Erro de CORS ou backend não disponível');
     }
+    
     return Promise.reject(error);
   }
 );
@@ -40,18 +52,20 @@ api.interceptors.response.use(
 export const authApi = {
   login: (email: string, password: string) =>
     api.post('/auth/login', { email, password }),
-  
-  register: (name: string, email: string, password: string) =>
-    api.post('/auth/register', { name, email, password }),
-  
+
+  register: (name: string, email: string, password: string) => {
+    console.log('Enviando POST para /auth/register', { name, email, password });
+    return api.post('/auth/register', { name, email, password });
+  },
+
   getMe: () => api.get('/auth/me'),
-  
+
   updateProfile: (data: { name?: string; email?: string }) =>
     api.put('/auth/me', data),
-  
+
   changePassword: (currentPassword: string, newPassword: string) =>
     api.put('/auth/change-password', { currentPassword, newPassword }),
-  
+
   logout: () => api.post('/auth/logout'),
 };
 

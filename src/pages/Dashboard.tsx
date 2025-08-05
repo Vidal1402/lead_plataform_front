@@ -23,15 +23,48 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [statsResponse, historyResponse] = await Promise.all([
-          leadsApi.getLeadStats(),
-          leadsApi.getSearchHistory()
-        ]);
+        console.log('🔄 Carregando dados do dashboard...');
+        
+        // Por enquanto, carregar apenas stats (history está com problema no backend)
+        const statsResponse = await leadsApi.getLeadStats();
+        
+        // Tentar carregar history, mas não falhar se der erro
+        let historyResponse = null;
+        try {
+          historyResponse = await leadsApi.getSearchHistory();
+        } catch (historyError) {
+          console.log('⚠️ Erro ao carregar histórico (ignorando):', historyError);
+        }
 
-        setStats(statsResponse.data);
-        setHistory(historyResponse.data.history || []);
-      } catch (error) {
+        console.log('✅ Dados carregados com sucesso');
+        
+        // Corrigir estrutura de dados do stats
+        if (statsResponse.data.success && statsResponse.data.data) {
+          const statsData = statsResponse.data.data.geral;
+          
+          setStats({
+            totalLeads: statsData.totalLeads,
+            avgScore: statsData.avgScore,
+            avgAge: statsData.avgAge,
+            topNichos: statsResponse.data.data.porNicho || []
+          });
+        }
+        
+        // Corrigir estrutura de dados do history
+        if (historyResponse && historyResponse.data.success && historyResponse.data.data) {
+          setHistory(historyResponse.data.data.history || []);
+        } else {
+          setHistory([]);
+        }
+      } catch (error: any) {
         console.error('Erro ao carregar dados do dashboard:', error);
+        
+        // Se for erro 401, redirecionar para login
+        if (error.response?.status === 401) {
+          console.log('Token expirado, redirecionando para login...');
+          window.location.href = '/login';
+          return;
+        }
       } finally {
         setLoading(false);
       }
@@ -78,6 +111,29 @@ const Dashboard: React.FC = () => {
           <span>Gerar Leads</span>
         </Link>
       </div>
+
+      {/* Aviso para usuários sem leads */}
+      {stats?.totalLeads === 0 && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
+                Bem-vindo ao seu Dashboard!
+              </h3>
+              <div className="mt-2 text-sm text-green-700 dark:text-green-300">
+                <p>
+                  Você ainda não tem leads gerados. Comece gerando seus primeiros leads para ver estatísticas personalizadas aqui.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

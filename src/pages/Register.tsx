@@ -29,13 +29,40 @@ const Register: React.FC = () => {
   const password = watch('password');
 
   const onSubmit = async (data: RegisterForm) => {
+    const onSubmit = async (data: RegisterForm) => {
+  console.log('onSubmit chamado com:', data); // <-- Adicione aqui
+  setLoading(true);
+  try {
+    await registerUser(data.name, data.email, data.password);
+    toast.success('Conta criada com sucesso!');
+    navigate('/dashboard');
+  } catch (error: any) {
+    // ...existing code...
+  } finally {
+    setLoading(false);
+  }
+};
     setLoading(true);
     try {
       await registerUser(data.name, data.email, data.password);
       toast.success('Conta criada com sucesso!');
       navigate('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Erro ao criar conta');
+      console.error('Erro no registro:', error);
+      
+      let errorMessage = 'Erro ao criar conta';
+      
+      if (error.message) {
+        errorMessage = error.message;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Erro de conexão. Verifique se o backend está rodando na porta 5000.';
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

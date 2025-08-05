@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authApi } from '../services/api';
+import toast from 'react-hot-toast';
 
 interface User {
   _id: string;
@@ -42,125 +43,122 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      console.log('🔄 Inicializando autenticação...');
-      const savedToken = localStorage.getItem('token');
-      console.log('🔍 Token encontrado:', savedToken ? 'Sim' : 'Não');
-      
-      if (savedToken) {
-        // Se há um token salvo, verificar se é um token mock
-        if (savedToken.includes('mock-jwt-token')) {
-          console.log('🎭 Token mock detectado - mantendo usuário demo');
-          // Token mock - manter usuário demo
-          const mockUser = {
-            _id: '1',
-            name: 'Usuário Demo',
-            email: 'demo@example.com',
-            credits: 1000,
-            createdAt: new Date().toISOString(),
-            lastLogin: new Date().toISOString(),
-          };
-          setUser(mockUser);
-          setToken(savedToken);
-        } else {
-          console.log('🔐 Token real detectado - verificando com backend');
-          // Token real - tentar verificar com backend
-          try {
-            const response = await authApi.getMe();
-            setUser(response.data);
-            setToken(savedToken);
-          } catch (error) {
-            console.warn('❌ Token inválido ou backend indisponível:', error);
-            localStorage.removeItem('token');
-            setToken(null);
-            setUser(null);
-          }
-        }
+  const initializeAuth = async () => {
+    console.log('🔄 Inicializando autenticação...');
+    const savedToken = localStorage.getItem('token');
+    console.log('🔍 Token encontrado:', savedToken ? 'Sim' : 'Não');
+    
+    if (savedToken) {
+      try {
+        console.log('🔐 Verificando token com backend...');
+        const response = await authApi.getMe();
+        setUser(response.data); // Corrigido: dados vêm diretamente em response.data
+        setToken(savedToken);
+        console.log('✅ Token válido, usuário autenticado');
+      } catch (error: any) {
+        // ...existing code...
       }
-      setLoading(false);
-      console.log('✅ Inicialização concluída');
-    };
+    }
+    setLoading(false);
+    console.log('✅ Inicialização concluída');
+  };
 
     initializeAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await authApi.login(email, password);
-      const { token: newToken, ...userData } = response.data;
+  try {
+    const response = await authApi.login(email, password);
+const { token, user } = response.data;
+if (!token) throw new Error('Token não recebido do servidor');
+localStorage.setItem('token', token);
+setToken(token);
+setUser(user);
+console.log('✅ Login realizado com sucesso');
+    } catch (error: any) {
+      console.error('❌ Erro no login:', error);
       
-      localStorage.setItem('token', newToken);
-      setToken(newToken);
-      setUser(userData);
-    } catch (error) {
-      // Se o backend não estiver disponível, simular login
-      console.log('🔐 Simulando login - Backend não disponível');
-      const mockUser = {
-        _id: '1',
-        name: 'Usuário Demo',
-        email: email,
-        credits: 1000,
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-      };
+      let errorMessage = 'Erro ao fazer login';
       
-      const mockToken = 'mock-jwt-token-' + Date.now();
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Erro de conexão. Verifique se o backend está rodando na porta 5000.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
       
-      console.log('💾 Salvando token mock:', mockToken);
-      localStorage.setItem('token', mockToken);
-      setToken(mockToken);
-      setUser(mockUser);
-      console.log('✅ Login simulado concluído');
+      throw new Error(errorMessage);
     }
   };
 
   const register = async (name: string, email: string, password: string) => {
-    try {
-      const response = await authApi.register(name, email, password);
-      const { token: newToken, ...userData } = response.data;
-      
-      localStorage.setItem('token', newToken);
-      setToken(newToken);
-      setUser(userData);
-    } catch (error) {
-      // Se o backend não estiver disponível, simular registro
-      console.warn('Backend não disponível, simulando registro:', error);
-      const mockUser = {
-        _id: '1',
-        name: name,
-        email: email,
-        credits: 100,
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-      };
-      
-      const mockToken = 'mock-jwt-token-' + Date.now();
-      
-      localStorage.setItem('token', mockToken);
-      setToken(mockToken);
-      setUser(mockUser);
+    console.log('Chamando register do contexto:', name, email, password); // <-- Adicione aqui
+  try {
+    // ...existing code...
+  } catch (error: any) {
+    // ...existing code...
+  }
+  try {
+    const response = await authApi.register(name, email, password);
+    console.log('Resposta do backend:', response);
+    console.log('response.data:', response.data);
+    const { token, user } = response.data;
+if (!token) throw new Error('Token não recebido do servidor');
+localStorage.setItem('token', token);
+setToken(token);
+setUser(user);
+console.log('✅ Registro realizado com sucesso');
+  } catch (error: any) {
+    console.error('❌ Erro no registro:', error);
+
+    let errorMessage = 'Erro ao criar conta';
+
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.response?.data?.error) {
+      errorMessage = error.response.data.error;
+    } else if (error.code === 'ERR_NETWORK') {
+      errorMessage = 'Erro de conexão. Verifique se o backend está rodando na porta 5000.';
+    } else if (error.message) {
+      errorMessage = error.message;
     }
-  };
+
+    // Mostre o erro para o usuário (opcional)
+    toast.error(errorMessage);
+
+    // Interrompa a execução após o erro
+    return; // <-- Adicione este return
+  }
+};
 
   const logout = () => {
+    console.log('🚪 Fazendo logout...');
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
+    console.log('✅ Logout concluído');
   };
 
   const updateProfile = async (data: { name?: string; email?: string }) => {
     try {
-      // Aqui você pode implementar a chamada para a API
-      // Por enquanto, vamos simular uma atualização
-      if (user) {
-        const updatedUser = {
-          ...user,
-          ...data,
-        };
-        setUser(updatedUser);
+      const response = await authApi.updateProfile(data);
+      setUser(response.data.data);
+      console.log('✅ Perfil atualizado com sucesso');
+    } catch (error: any) {
+      console.error('❌ Erro ao atualizar perfil:', error);
+      
+      let errorMessage = 'Erro ao atualizar perfil';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
       }
-    } catch (error) {
-      throw error;
+      
+      throw new Error(errorMessage);
     }
   };
 
